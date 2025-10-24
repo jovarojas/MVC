@@ -1,6 +1,5 @@
 package es.dam.accesodatos.model;
 
-
     public class Libro {
         private Integer id;
         private String titulo;
@@ -22,10 +21,6 @@ package es.dam.accesodatos.model;
             this.isbn = isbn;
             this.precio = precio;
         }
-
-
-
-
 
         @Override
         public String toString() {
