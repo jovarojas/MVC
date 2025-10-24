@@ -9,7 +9,8 @@ import java.util.Date;
 
 /**
  * El Controlador: coordina Vista ↔ Servicio. No muestra ni accede a BD directamente!!!! Por favor, tened esto muy en cuenta!!!.
- Revisad el fichero excel de los apuntes en Aules si tenéis dudas*/
+ * Revisad el fichero excel de los apuntes en Aules si tenéis dudas
+ */
 public class Controller {
 
     private final ConsolaView view;
@@ -52,11 +53,11 @@ public class Controller {
 
     private void crearLibro() {
         String titulo = view.pedir("Título");
-        String autor  = view.pedir("Autor");
-        String isbn   = view.pedir("ISBN");
-        int precio    = view.pedirEntero("Precio (entero positivo)");
+        String isbn = view.pedir("ISBN");
+        int precio = view.pedirEntero("Precio (entero positivo)");
+        int autorId = view.pedirEntero("ID del autor");
 
-        Integer id = libroService.crearLibro(titulo, autor, isbn, precio);
+        Integer id = libroService.crearLibro(titulo, isbn, precio, autorId);
         view.info(" Libro creado con id " + id);
     }
 
@@ -68,11 +69,11 @@ public class Controller {
     private void actualizarLibro() {
         int id = view.pedirEntero("ID del libro a actualizar");
         String titulo = view.pedir("Nuevo título");
-        String autor  = view.pedir("Nuevo autor");
-        String isbn   = view.pedir("Nuevo ISBN");
-        int precio    = view.pedirEntero("Nuevo precio (entero positivo)");
+        String isbn = view.pedir("Nuevo ISBN");
+        int precio = view.pedirEntero("Nuevo precio (entero positivo)");
+        int autorId = view.pedirEntero("Nuevo ID del autor");
 
-        boolean ok = libroService.actualizar(id, titulo, autor, isbn, precio);
+        boolean ok = libroService.actualizar(id, titulo, isbn, precio, autorId);
         view.info(ok ? "Libro actualizado correctamente" : "No se encontró el libro con ese ID");
     }
 
@@ -84,17 +85,14 @@ public class Controller {
 
     private void verLibroPorId() {
         int id = view.pedirEntero("ID del libro a consultar");
-        libroService.obtenerPorId(id)
-                .ifPresentOrElse(
-                        libro -> view.info("📘 " + libro),
-                        () -> view.info("Atención! No se encontró ningún libro con ese ID")
-                );
+        libroService.obtenerPorId(id).ifPresentOrElse(libro -> view.info("📘 " + libro), () -> view.info("Atención! No se encontró ningún libro con ese ID"));
     }
-//---------------------------------AUTOR---------------------------------------------
+
+    //---------------------------------AUTOR---------------------------------------------
     private void crearAutor() {
         String nombre = view.pedir("Nombre");
-        Date fechaNac = view.pedirFecha("Fecha de nacimiento:");
-        String nacionalidad  = view.pedir("Nacionalidad");
+        Date fechaNac = view.pedirFecha("Fecha de nacimiento");
+        String nacionalidad = view.pedir("Nacionalidad");
 
         Integer id = autorService.crear(nombre, fechaNac, nacionalidad);
         view.info(" Autor creado con id " + id);
@@ -108,8 +106,8 @@ public class Controller {
     private void actualizarAutor() {
         int id = view.pedirEntero("ID del autor a actualizar");
         String nombre = view.pedir("Nombre");
-        Date fechaNac = view.pedirFecha("Fecha de nacimiento:");
-        String nacionalidad  = view.pedir("Nacionalidad");
+        Date fechaNac = view.pedirFecha("Fecha de nacimiento");
+        String nacionalidad = view.pedir("Nacionalidad");
 
         boolean ok = autorService.actualizar(id, nombre, fechaNac, nacionalidad);
         view.info(ok ? "Autor actualizado correctamente" : "No se encontró el autor con ese ID");
@@ -123,15 +121,26 @@ public class Controller {
 
     private void verAutorPorId() {
         int id = view.pedirEntero("ID del autor a consultar");
-        autorService.obtenerPorId(id)
-                .ifPresentOrElse(
-                        autor -> view.info("📘 " + autor),
-                        () -> view.info("Atención! No se encontró ningún autor con ese ID")
-                );
+        autorService.obtenerPorId(id).ifPresentOrElse(autor -> view.info("📘 " + autor), () -> view.info("Atención! No se encontró ningún autor con ese ID"));
     }
 
-    private void informacionCompleta(){
+    //---------------------------------GENERAL---------------------------------------------
+    private void informacionCompleta() {
+        int id = view.pedirEntero("ID del libro a consultar");
         //titulo del libro, nombre del autor, fecha nac y nacionalidad
+        libroService.obtenerPorId(id).ifPresentOrElse(libro -> {
+                    String titulo = libro.getTitulo();
 
+                    autorService.obtenerPorId(libro.getAutorId()).ifPresentOrElse(
+                            autor -> view.info(
+                                    "Título: " + titulo +
+                                            "\nAutor: " + autor.getNombre() +
+                                            "\nFecha de nacimiento: " + autor.getFechaNacimiento() +
+                                            "\nNacionalidad: " + autor.getNacionalidad()
+                            ),
+                            () -> view.info("Título: " + titulo + "\nAutor: No disponible")
+                    );
+                },
+                () -> view.info("Atención! No se encontró ningún libro con ese ID"));
     }
 }

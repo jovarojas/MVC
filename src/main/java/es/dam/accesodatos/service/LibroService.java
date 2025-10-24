@@ -11,9 +11,9 @@ public class LibroService {
     private final LibroDaoJdbc dao = new LibroDaoJdbc();
 
     /** Crear un libro nuevo (con validaciones) */
-    public Integer crearLibro(String titulo, String autor, String isbn, int precio) {
+    public Integer crearLibro(String titulo,  String isbn, int precio, int autorId) {
         validarCamposComunes(titulo, isbn, precio);
-        return dao.create(new Libro(titulo, autor, isbn, precio));
+        return dao.create(new Libro(titulo, isbn, precio, autorId));
     }
 
     /** Listar todos los libros */
@@ -27,11 +27,11 @@ public class LibroService {
     }
 
     /** Actualizar un libro existente */
-    public boolean actualizar(Integer id, String titulo, String autor, String isbn, int precio) {
+    public boolean actualizar(Integer id, String titulo, String isbn, int precio, int autorId) {
         if (id == null)
             throw new ReglaNegocioException("Id requerido");
         validarCamposComunes(titulo, isbn, precio);
-        return dao.update(new Libro(id, titulo, autor, isbn, precio));
+        return dao.update(new Libro(id, titulo, isbn, precio, autorId));
     }
 
     /** Borrar un libro */

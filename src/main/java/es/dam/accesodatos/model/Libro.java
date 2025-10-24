@@ -3,34 +3,26 @@ package es.dam.accesodatos.model;
     public class Libro {
         private Integer id;
         private String titulo;
-        private String autor;
         private String isbn;
         private int precio;
+        private Autor autor;
+        private int autorId;
 
-        public Libro(Integer id, String titulo, String autor, String isbn, int precio) {
+        public Libro(int id, String titulo, String isbn, int precio, int autorId) {
             this.id = id;
             this.titulo = titulo;
-            this.autor = autor;
             this.isbn = isbn;
             this.precio = precio;
+            this.autorId = autorId;
         }
-        public Libro(String titulo, String autor, String isbn, int precio) {
+
+
+        public Libro(String titulo, String isbn, int precio, int autorId) {
 
             this.titulo = titulo;
-            this.autor = autor;
+            this.autorId = autorId;
             this.isbn = isbn;
             this.precio = precio;
-        }
-
-        @Override
-        public String toString() {
-            return "Libro{" +
-                    "id=" + id +
-                    ", titulo='" + titulo + '\'' +
-                    ", autor='" + autor + '\'' +
-                    ", isbn='" + isbn + '\'' +
-                    ", precio=" + precio +
-                    '}';
         }
 
         public Libro() {
@@ -38,6 +30,17 @@ package es.dam.accesodatos.model;
 
         public Libro(Integer id) {
             this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "Libro{" +
+                    "id=" + id +
+                    ", titulo='" + titulo + '\'' +
+                    ", isbn='" + isbn + '\'' +
+                    ", precio=" + precio +
+                    ", autorId=" + autorId +
+                    '}';
         }
 
         public void setId(Integer id) {
@@ -56,9 +59,13 @@ package es.dam.accesodatos.model;
             this.precio = precio;
         }
 
-        public void setAutor(String autor) {
+        public void setAutor(Autor autor) {
             this.autor = autor;
         }
+
+        public void setAutorId(int autorId) { this.autorId = autorId;}
+
+        public int getAutorId() { return autorId; }
 
         public Integer getId() {
             return id;
@@ -72,7 +79,7 @@ package es.dam.accesodatos.model;
             return isbn;
         }
 
-        public String getAutor() {
+        public Autor getAutor() {
             return autor;
         }
 

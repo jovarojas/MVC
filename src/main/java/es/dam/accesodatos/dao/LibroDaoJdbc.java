@@ -11,14 +11,14 @@ public class LibroDaoJdbc implements Dao<Libro, Integer> {
     @Override
     public Integer create(Libro l) {
         if (l == null) throw new IllegalArgumentException("Libro no puede ser null");
-        final String sql = "INSERT INTO libros (titulo, autor, isbn, precio) VALUES (?,?,?,?)";
+        final String sql = "INSERT INTO libros (titulo, isbn, precio, autor_id) VALUES (?,?,?,?)";
         try (Connection con = Conexion.get();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, l.getTitulo());
-            ps.setString(2, l.getAutor());
-            ps.setString(3, l.getIsbn());
-            ps.setInt(4, l.getPrecio());
+            ps.setString(2, l.getIsbn());
+            ps.setInt(3, l.getPrecio());
+            ps.setInt(4, l.getAutorId());
 
             int rows = ps.executeUpdate();
             if (rows != 1) {
@@ -44,7 +44,7 @@ public class LibroDaoJdbc implements Dao<Libro, Integer> {
     }
     @Override
     public Optional<Libro> findById(Integer id) {
-        String sql = "SELECT id, titulo, autor, isbn, precio FROM libros WHERE id = ?";
+        String sql = "SELECT id, titulo, isbn, precio, autor_id FROM libros WHERE id = ?";
         try (Connection con = Conexion.get();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -61,7 +61,7 @@ public class LibroDaoJdbc implements Dao<Libro, Integer> {
     @Override
     public List<Libro> findAll() {
         List<Libro> res = new ArrayList<>();
-        String sql = "SELECT id, titulo, autor, isbn, precio FROM libros ORDER BY id";
+        String sql = "SELECT id, titulo, isbn, precio, autor_id FROM libros ORDER BY id";
         try (Connection con = Conexion.get();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -75,15 +75,14 @@ public class LibroDaoJdbc implements Dao<Libro, Integer> {
 
     @Override
     public boolean update(Libro l) {
-        String sql = "UPDATE libros SET titulo=?, autor=?, isbn=?, precio=? WHERE id=?";
+        String sql = "UPDATE libros SET titulo=?, isbn=?, precio=?, autor_id=? WHERE id=?";
         try (Connection con = Conexion.get();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, l.getTitulo());
-            ps.setString(2, l.getAutor());
-            ps.setString(3, l.getIsbn());
-            ps.setInt(4, l.getPrecio());
-            ps.setInt(5, l.getId());
+            ps.setString(2, l.getIsbn());
+            ps.setInt(3, l.getPrecio());
+            ps.setInt(4, l.getAutorId());
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new RuntimeException("Error actualizando libro", e);
@@ -103,29 +102,14 @@ public class LibroDaoJdbc implements Dao<Libro, Integer> {
         }
     }
 
-    // ---------- auxiliares ---------- LAS PODEIS OBVIAR o INCLUIR DENTRO DE OTROS MÉTODOS MÁS GENERALES
+    // ---------- auxiliares ----------
     private Libro map(ResultSet rs) throws SQLException {
         return new Libro(
                 rs.getInt("id"),
                 rs.getString("titulo"),
-                rs.getString("autor"),
                 rs.getString("isbn"),
-                rs.getInt("precio")
+                rs.getInt("precio"),
+                rs.getInt("autor_id")
         );
-    }
-
-    //(Opcional) ejemplo de metodo específico:
-    public Optional<Libro> findByIsbn(String isbn) {
-        String sql = "SELECT id, titulo, autor, isbn, precio FROM libros WHERE isbn = ?";
-        try (Connection con = Conexion.get();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, isbn);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return Optional.of(map(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error buscando por ISBN", e);
-        }
-        return Optional.empty();
     }
 }
