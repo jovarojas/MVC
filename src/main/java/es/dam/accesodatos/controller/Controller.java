@@ -8,8 +8,7 @@ import es.dam.accesodatos.view.ConsolaView;
 import java.util.Date;
 
 /**
- * El Controlador: coordina Vista ↔ Servicio. No muestra ni accede a BD directamente!!!! Por favor, tened esto muy en cuenta!!!.
- * Revisad el fichero excel de los apuntes en Aules si tenéis dudas
+ * El Controlador: coordina Vista ↔ Servicio.
  */
 public class Controller {
 

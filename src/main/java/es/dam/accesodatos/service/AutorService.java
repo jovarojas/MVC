@@ -42,7 +42,7 @@ public class AutorService {
         return dao.delete(id);
     }
 
-    /** Validaciones más generales, pero vosotros podéis añadir más */
+    /** Validaciones más generales */
     private void validarCamposComunes(String nombre, Date fecha, String nacionalidad) {
         if (nombre == null || nombre.isBlank())
             throw new ReglaNegocioException("El nombre es obligatorio");
@@ -52,6 +52,5 @@ public class AutorService {
             throw new ReglaNegocioException("La fecha de nacimiento es posterior a hoy");
         if (nacionalidad == null || nacionalidad.isBlank())
             throw new ReglaNegocioException("La nacionalidad es obligatorio");
-
     }
 }

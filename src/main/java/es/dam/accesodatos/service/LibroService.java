@@ -41,7 +41,7 @@ public class LibroService {
         return dao.delete(id);
     }
 
-    /** Validaciones más generales, pero vosotros podéis añadir más */
+    /** Validaciones más generales*/
     private void validarCamposComunes(String titulo, String isbn, int precio) {
         if (titulo == null || titulo.isBlank())
             throw new ReglaNegocioException("El título es obligatorio");

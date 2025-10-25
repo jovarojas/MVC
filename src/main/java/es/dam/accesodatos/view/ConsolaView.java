@@ -32,7 +32,7 @@ public class ConsolaView {
     }
 
     /**
-     * Pide un texto al usuario (por ejemplo, título o autor).
+     * Pide un texto al usuario.
      */
     public String pedir(String etiqueta) {
         System.out.print(etiqueta + ": ");
@@ -40,7 +40,7 @@ public class ConsolaView {
     }
 
     /**
-     * Pide un texto al usuario (por ejemplo, título o autor).
+     * Pide una fecha al usuario en formato dd/mm/yyyy.
      */
     public Date pedirFecha(String etiqueta) {
         System.out.print(etiqueta + ": ");
@@ -71,16 +71,11 @@ public class ConsolaView {
         }
     }
 
-    /**
-     * Este metodo lo hacemos para sacar por pantalla los mensajes de información
-     */
     public void info(String msg) {
         System.out.println(msg);
     }
 
-    /**
-     * Este otro metodo es para mostrar los mensajes de error.
-     */
+
     public void error(String msg) {
         System.err.println("ERROR: " + msg);
     }
